@@ -1,17 +1,33 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+
+import { Outlet, useNavigate } from "react-router-dom";
+import { SideBar } from "./container/SideBarContainer";
+import { useContext, useEffect } from "react";
+import { FirebaseAuthContext } from "./contexts/FirebaseAuthContext";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const firebasecontext =useContext(FirebaseAuthContext)
+const loginedUser=firebasecontext?.loginedUser;
+
+const navigate=useNavigate();
+  useEffect(()=>{
+
+    if(loginedUser!==undefined){
+      if(loginedUser){
+        navigate('/')
+      }else{
+        navigate('login')
+      }
+    }
+    
+  },[loginedUser,navigate])
 
   return (
-    <>
-    <h1>Developing ToDo app with name of TodoSphere</h1>
-    </>
-   
-  )
+    <div className="w-[100vw]  justify-between   min-h-[100vh] text-start flex    ">
+
+      <Outlet />
+<SideBar/>
+    </div>
+  );
 }
 
-export default App
+export default App;
